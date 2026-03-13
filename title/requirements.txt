@@ -9,3 +9,4 @@ packaging==26.0
 PyMySQL==1.1.2
 sqlparse==0.5.5
 tzdata==2025.3
+whitenoise
