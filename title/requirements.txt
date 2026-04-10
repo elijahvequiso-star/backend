@@ -12,3 +12,5 @@ sqlparse==0.5.5
 tzdata==2025.3
 psycopg[binary]==3.2.13
 whitenoise==6.9.0
+mysqlclient>=2.2.1
+

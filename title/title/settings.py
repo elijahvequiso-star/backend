@@ -1,12 +1,8 @@
 from pathlib import Path
+import importlib
 import os
 
 import dj_database_url
-try:
-    from dotenv import load_dotenv
-except ImportError:
-    def load_dotenv(*args, **kwargs):
-        return False
 
 
 def env_bool(name, default=False):
@@ -18,7 +14,15 @@ def env_list(name, default=""):
     return [item.strip() for item in raw_value.split(",") if item.strip()]
 
 
-load_dotenv(Path(__file__).resolve().parent.parent.parent / ".env")
+def load_local_dotenv():
+    try:
+        dotenv = importlib.import_module("dotenv")
+    except ImportError:
+        return False
+    return dotenv.load_dotenv(Path(__file__).resolve().parent.parent.parent / ".env")
+
+
+load_local_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME", "").strip()
