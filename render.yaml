@@ -1,0 +1,32 @@
+databases:
+  - name: vequiso-build-hub-db
+    plan: free
+
+services:
+  - type: web
+    name: vequiso-build-hub-backend
+    runtime: python
+    plan: free
+    rootDir: title
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    preDeployCommand: python manage.py migrate --noinput
+    startCommand: gunicorn title.wsgi:application
+    healthCheckPath: /health/
+    autoDeployTrigger: commit
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: DJANGO_SETTINGS_MODULE
+        value: title.settings
+      - key: DEBUG
+        value: false
+      - key: USE_POSTGRES
+        value: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vequiso-build-hub-db
+          property: connectionString
+      - key: ALLOWED_HOSTS
+        value: .onrender.com
+      - key: SECRET_KEY
+        generateValue: true
