@@ -41,7 +41,14 @@ class Command(BaseCommand):
             )
             UserProfile.objects.create(user=user, role=account['role'])
             Employee.objects.create(
+                employee_id=account['username'].upper(),
+                user=user,
+                first_name=name_parts[0],
+                last_name=name_parts[1] if len(name_parts) > 1 else '',
                 name=account['full_name'],
+                role=account['role'],
+                role_locked=True,
+                identity_verified=True,
                 position=account['position'],
                 department=account['department'],
                 status='Active',

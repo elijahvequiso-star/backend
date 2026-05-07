@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Site, Employee, Request, Leave, Salary, Payroll, UserProfile
+from .models import Site, Employee, Request, Leave, Salary, Payroll, UserProfile, PasswordResetRequest
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
@@ -11,7 +11,9 @@ class SiteAdmin(admin.ModelAdmin):
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'position', 'department', 'site', 'status']
+    list_display = ['employee_id', 'name', 'mobile_number', 'role', 'identity_verified', 'position', 'department', 'site', 'status']
+    search_fields = ['employee_id', 'first_name', 'last_name', 'name', 'mobile_number']
+    readonly_fields = ['role_locked', 'identity_verified', 'identity_document_name']
 
 @admin.register(Request)
 class RequestAdmin(admin.ModelAdmin):
@@ -27,4 +29,11 @@ class SalaryAdmin(admin.ModelAdmin):
 
 @admin.register(Payroll)
 class PayrollAdmin(admin.ModelAdmin):
-    list_display = ['employee', 'week_start', 'total_hours', 'net_pay']
+    list_display = ['employee', 'site', 'week_start', 'total_hours', 'net_pay']
+    list_filter = ['site', 'week_start']
+    search_fields = ['employee__employee_id', 'employee__name', 'site__name', 'site__location']
+
+@admin.register(PasswordResetRequest)
+class PasswordResetRequestAdmin(admin.ModelAdmin):
+    list_display = ['employee', 'status', 'created_at']
+    list_filter = ['status', 'created_at']
